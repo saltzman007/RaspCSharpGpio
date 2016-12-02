@@ -1,0 +1,5 @@
+/home/pi/WiringPiWrapper/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/pi/WiringPiWrapper/bin/Debug/WiringPiWrapper.dll.mdb
+/home/pi/WiringPiWrapper/bin/Debug/WiringPiWrapper.dll
+/home/pi/WiringPiWrapper/obj/Debug/WiringPiWrapper.dll
+/home/pi/WiringPiWrapper/obj/Debug/WiringPiWrapper.dll.mdb
