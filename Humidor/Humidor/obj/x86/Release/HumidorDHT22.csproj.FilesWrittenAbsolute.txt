@@ -1,0 +1,8 @@
+/root/Humidor/Humidor/obj/x86/Release/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/root/Humidor/Humidor/bin/Release/Humidor.exe.mdb
+/root/Humidor/Humidor/bin/Release/Humidor.exe
+/root/Humidor/Humidor/obj/x86/Release/Humidor.exe
+/root/Humidor/Humidor/obj/x86/Release/Humidor.exe.mdb
+/root/Humidor/Humidor/bin/Release/WiringPiWrapper.dll
+/root/Humidor/Humidor/bin/Release/WiringPiWrapper.dll.mdb
+/root/Humidor/Humidor/bin/Release/log4net.dll

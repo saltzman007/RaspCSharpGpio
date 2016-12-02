@@ -1,0 +1,16 @@
+/root/Humidor/Humidor/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/root/Humidor/Humidor/bin/Debug/WiringPiWrapper.dll
+/root/Humidor/Humidor/bin/Debug/WiringPiWrapper.dll.mdb
+/root/Humidor/Humidor/bin/Debug/log4net.dll
+/root/Humidor/Humidor/bin/Debug/Humidor.exe.mdb
+/root/Humidor/Humidor/bin/Debug/Humidor.exe
+/root/Humidor/Humidor/obj/x86/Debug/Humidor.exe
+/root/Humidor/Humidor/obj/x86/Debug/Humidor.exe.mdb
+/home/pi/Humidor/Humidor/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/pi/Humidor/Humidor/bin/Debug/Humidor.exe.mdb
+/home/pi/Humidor/Humidor/bin/Debug/Humidor.exe
+/home/pi/Humidor/Humidor/obj/x86/Debug/Humidor.exe
+/home/pi/Humidor/Humidor/obj/x86/Debug/Humidor.exe.mdb
+/home/pi/Humidor/Humidor/bin/Debug/WiringPiWrapper.dll
+/home/pi/Humidor/Humidor/bin/Debug/WiringPiWrapper.dll.mdb
+/home/pi/Humidor/Humidor/bin/Debug/log4net.dll
