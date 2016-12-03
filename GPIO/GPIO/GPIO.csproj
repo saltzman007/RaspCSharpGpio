@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{0DD6125C-0718-4F3D-878A-17D8BCCACB36}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>GPIO1</RootNamespace>
+    <AssemblyName>GPIO1</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Raspberry.System">
+      <HintPath>..\packages\Raspberry.System.2.0.0\lib\net40\Raspberry.System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.4\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LCD1602_HD44780.cs" />
+    <Compile Include="Toggler.cs" />
+    <Compile Include="FunktionsgeneratorMCP4921.cs" />
+    <Compile Include="AD_MCP3201_SPI.cs" />
+    <Compile Include="DA_MCP4921_SPI.cs" />
+    <Compile Include="OszilloskopAD_MCP3201_SPI.cs" />
+    <Compile Include="DA_AD_DA_Reihe.cs" />
+    <Compile Include="Funktionsgenerator8562FPZ_Parallel.cs" />
+    <Compile Include="DA_8562FPZ_Parallel.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="GPIO1.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\WiringPiWrapper\WiringPiWrapper.csproj">
+      <Project>{2BB413E8-B7E2-4065-8829-DAE09CDD2BE5}</Project>
+      <Name>WiringPiWrapper</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

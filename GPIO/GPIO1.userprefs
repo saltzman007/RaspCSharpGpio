@@ -1,0 +1,15 @@
+﻿<Properties StartupItem="GPIO1/GPIO1.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
+  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/root/GPIO1/GPIO1/Program.cs" line="1212" column="27" />
+      <Breakpoint file="/home/pi/Downloads/raspberry-sharp-io-master/Raspberry.IO.GeneralPurpose/GpioConnection.cs" line="60" column="1" />
+      <Breakpoint file="/home/pi/Downloads/raspberry-sharp-io-master/Raspberry.IO.GeneralPurpose/GpioConnection.cs" line="61" column="52" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>../../home/pi/Downloads/raspberry-sharp-io-master/Tests/Test.Gpio.MCP3008/Test.Gpio.MCP3008.csproj</String>
+  </DisabledProjects>
+</Properties>

@@ -1,0 +1,12 @@
+/root/GPIO1/GPIO1/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/root/GPIO1/GPIO1/bin/Debug/GPIO1.exe.mdb
+/root/GPIO1/GPIO1/bin/Debug/GPIO1.exe
+/root/GPIO1/GPIO1/obj/x86/Debug/GPIO1.exe
+/root/GPIO1/GPIO1/obj/x86/Debug/GPIO1.exe.mdb
+/root/GPIO1/GPIO1/bin/Debug/Raspberry.System.dll
+/root/GPIO1/GPIO1/bin/Debug/Raspberry.IO.dll
+/root/GPIO1/GPIO1/bin/Debug/Raspberry.IO.GeneralPurpose.dll
+/root/GPIO1/GPIO1/bin/Debug/Raspberry.IO.Interop.dll
+/root/GPIO1/GPIO1/bin/Debug/Raspberry.IO.GeneralPurpose.dll.mdb
+/root/GPIO1/GPIO1/bin/Debug/Raspberry.IO.Interop.dll.mdb
+/root/GPIO1/GPIO1/bin/Debug/Raspberry.IO.dll.mdb
