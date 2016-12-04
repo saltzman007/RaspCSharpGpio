@@ -1,0 +1,16 @@
+clear
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install mono-runtime
+sudo apt-get install monodevelop
+sudo apt-get install mono-complete
+sudo apt-get install xterm
+git clone git://git.drogon.net/wiringPi
+git pull origin
+cd wiringPi
+./build
+# Ohne xterm und shutdown debugt monodevelop nicht!
+sudo shutdown -r
+
+
+
