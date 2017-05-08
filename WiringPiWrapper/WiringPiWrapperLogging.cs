@@ -122,5 +122,34 @@ namespace WiringPiLib
 			Log4Net.Info(string.Format("PwmWrite Pin {0} Value {1}", pinName, value));
 			WiringPiWrapperDirect.pwmWrite(pin, value);
 		}
+		//TODO add logging if necessary...
+		public int WiringPiI2CSetup (int devId)
+		{
+			return WiringPiWrapperDirect.wiringPiI2CSetup (devId);
+		}
+		public int WiringPiI2CRead(int fd)
+		{
+			return WiringPiWrapperDirect.wiringPiI2CRead (fd);
+		}
+		public int WiringPiI2CWrite (int fd, int data)
+		{
+			return WiringPiWrapperDirect.wiringPiI2CWrite(fd, data);
+		}
+		public int WiringPiI2CWriteReg8 (int fd, int reg, int data)
+		{
+			return WiringPiWrapperDirect.wiringPiI2CWriteReg8 (fd, reg, data);
+		}
+		public int WiringPiI2CWriteReg16 (int fd, int reg, int data)
+		{
+			return WiringPiWrapperDirect.wiringPiI2CWriteReg16 (fd, reg, data);
+		}
+		public int WiringPiI2CReadReg8 (int fd, int reg)
+		{
+			return WiringPiWrapperDirect.wiringPiI2CReadReg8 (fd, reg);
+		}
+		public int WiringPiI2CReadReg16 (int fd, int reg)
+		{
+			return WiringPiWrapperDirect.wiringPiI2CReadReg16 (fd, reg);
+		}
 	}
 }

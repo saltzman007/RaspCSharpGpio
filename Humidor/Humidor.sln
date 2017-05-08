@@ -20,4 +20,7 @@ Global
 		{E65098B9-F187-4F7E-ADD5-ED7763A0492F}.Release|x86.ActiveCfg = Release|x86
 		{E65098B9-F187-4F7E-ADD5-ED7763A0492F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Humidor\HumidorDHT22.csproj
+	EndGlobalSection
 EndGlobal

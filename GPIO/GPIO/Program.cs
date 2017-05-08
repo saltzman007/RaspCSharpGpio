@@ -866,6 +866,27 @@ namespace GPIO1
 			osciThread.Abort ();
 		}
 
+		private static void Schrittmotor()
+		{
+			WirinPiWrapper wiringPiLib = new WirinPiWrapper();
+			wiringPiLib.WiringPiSetupGpio ();
+
+			Schrittmotor schrittmotor = new Schrittmotor (wiringPiLib, 1,2,3,4);
+			schrittmotor.Run (100);
+		}
+
+		private static void FolienTastatur()
+		{
+			FolienTastatur folientastatur = new GPIO1.FolienTastatur ();
+			folientastatur.ReadWrite ();
+		}
+
+		private static void UART()
+		{
+			UART uart = new UART();
+			string result = uart.WriteRead("bullshit");
+		}
+
 		private static void DA_AD_DA_Reihe()
 		{
 			DA_AD_DA_Reihe dad = new GPIO1.DA_AD_DA_Reihe();
@@ -873,6 +894,36 @@ namespace GPIO1
 			dad.DoWork ();
 		}
 
+		private static void Kompass()
+		{
+			int TasterPin = 26;
+
+			WirinPiWrapper wiringPiLib = new WirinPiWrapper();
+			wiringPiLib.WiringPiSetupGpio ();
+
+			wiringPiLib.PinMode(TasterPin, PinType.INPUT) ;	//37 liest am Taster, um die Nadel manuell zu bewegen
+
+			ISchrittmotor schrittMotor = new Schrittmotor (wiringPiLib, 19,13,6,5);
+
+			schrittMotor.Run (1);
+
+			KompassHMC6343 kompass = new KompassHMC6343(wiringPiLib);
+			KompassDisplay display = new KompassDisplay (schrittMotor);
+
+			while (true) 
+			{
+				while(wiringPiLib.DigitalRead (TasterPin) == 1)
+				{
+					Console.WriteLine ("Calibrate");
+					display.Calibrate();
+				}
+
+				double heading = kompass.ReadHeading ();
+				Console.WriteLine ("Heading: " + heading);
+				//display.ShowClassic (heading);
+				display.ShowNavigation (heading);
+			}
+		}
 
 		private static void Gordonsleeper()
 		{
@@ -927,8 +978,12 @@ namespace GPIO1
 			//DA_AD_DA_Reihe();
 			//DigitalWriteByte();
 			//AD_8562_Parallel();
-			FunktionsgeneratorParallel();
+			//FunktionsgeneratorParallel();
 			//Gordonsleeper();
+			//Schrittmotor ();
+			//FolienTastatur();
+			//UART();
+			Kompass ();
 		}
 	}
 }

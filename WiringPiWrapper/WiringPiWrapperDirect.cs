@@ -55,7 +55,23 @@ namespace WiringPiLib
 	public delegate void PwmSetClock(int divisor); 
 	public delegate void PwmWrite(int pin, int value);
 
+	//public delegate int SerialOpen (char *device, int baud);
+	public delegate int SerialOpen (string device, int baud);	//Ist string gut??
+	public delegate void SerialClose (int fd);
+	public delegate void  SerialPutchar (int fd, char c);
+	//public delegate void  SerialPuts (int fd, char *s) ;
+	public delegate void  SerialPuts (int fd, string s) ;
+	public delegate int SerialDataAvail (int fd);
+	public delegate int SerialGetchar (int fd) ;
+	public delegate void SerialFlush (int fd) ;
 
+	public delegate int WiringPiI2CSetup (int devId);
+	public delegate int WiringPiI2CRead(int fd);
+	public delegate int WiringPiI2CWrite (int fd, int data) ;
+	public delegate int WiringPiI2CWriteReg8 (int fd, int reg, int data);
+	public delegate int WiringPiI2CWriteReg16 (int fd, int reg, int data);
+	public delegate int WiringPiI2CReadReg8 (int fd, int reg) ;
+	public delegate int WiringPiI2CReadReg16 (int fd, int reg) ;
 
 	public class WiringPiWrapperDirect
 	{
@@ -76,6 +92,22 @@ namespace WiringPiLib
 		public static PwmSetClock pwmSetClock = pwmSetClockRaw;
 		public static PwmWrite pwmWrite = pwmWriteRaw;
 
+		public static SerialOpen serialOpen = serialOpenRaw;
+		public static SerialClose serialClose = serialCloseRaw;
+		public static  SerialPutchar serialPutchar = serialPutcharRaw;
+		public static  SerialPuts serialPuts = serialPutsRaw;
+		public static SerialDataAvail serialDataAvail = serialDataAvailRaw;
+		public static SerialGetchar serialGetchar = serialGetcharRaw;
+		public static SerialFlush serialFlush = serialFlushRaw;
+
+		public static WiringPiI2CSetup wiringPiI2CSetup = wiringPiI2CSetupRaw;
+		public static WiringPiI2CRead wiringPiI2CRead = wiringPiI2CReadRaw;
+		public static WiringPiI2CWrite wiringPiI2CWrite = wiringPiI2CWriteRaw;
+		public static WiringPiI2CWriteReg8 wiringPiI2CWriteReg8 = wiringPiI2CWriteReg8Raw;
+		public static WiringPiI2CWriteReg16 wiringPiI2CWriteReg16 = wiringPiI2CWriteReg16Raw;
+		public static WiringPiI2CReadReg8 wiringPiI2CReadReg8 = wiringPiI2CReadReg8Raw;
+		public static WiringPiI2CReadReg16 wiringPiI2CReadReg16 = wiringPiI2CReadReg16Raw;
+
 		[DllImport("libwiringPi.so", EntryPoint = "wiringPiSetup")]
 		private static extern int WiringPiSetupRaw();
 
@@ -92,7 +124,7 @@ namespace WiringPiLib
 		private static extern void pinModeRaw(int pin, PinType mode);
 
 		[DllImport("libwiringPi.so", EntryPoint = "digitalWrite")]
-		private static extern void digitalWriteRaw(int pin, int value);	//TODO check last status, schreib nur bei Änderung
+		private static extern void digitalWriteRaw(int pin, int value);
 
 		[DllImport("libwiringPi.so", EntryPoint = "digitalWriteByte")]
 		private static extern void digitalWriteByteRaw(int value);
@@ -161,25 +193,25 @@ namespace WiringPiLib
 		private static extern void setPadDrive (int group, int value);
 
 		[DllImport("libwiringPi.so", EntryPoint = "wiringPiI2CSetup")]
-		private static extern int wiringPiI2CSetup (int devId);
+		private static extern int wiringPiI2CSetupRaw (int devId);
 
 		[DllImport("libwiringPi.so", EntryPoint = "wiringPiI2CRead")]
-		private static extern int wiringPiI2CRead(int fd);
+		private static extern int wiringPiI2CReadRaw(int fd);
 
 		[DllImport("libwiringPi.so", EntryPoint = "wiringPiI2CWrite")]
-		private static extern int wiringPiI2CWrite (int fd, int data) ;
+		private static extern int wiringPiI2CWriteRaw (int fd, int data) ;
 
 		[DllImport("libwiringPi.so", EntryPoint = "wiringPiI2CWriteReg8")]
-		private static extern int wiringPiI2CWriteReg8 (int fd, int reg, int data);
+		private static extern int wiringPiI2CWriteReg8Raw (int fd, int reg, int data);
 
 		[DllImport("libwiringPi.so", EntryPoint = "wiringPiI2CWriteReg16")]
-		private static extern int wiringPiI2CWriteReg16 (int fd, int reg, int data);
+		private static extern int wiringPiI2CWriteReg16Raw (int fd, int reg, int data);
 
 		[DllImport("libwiringPi.so", EntryPoint = "wiringPiI2CReadReg8")]
-		private static extern int wiringPiI2CReadReg8 (int fd, int reg) ;
+		private static extern int wiringPiI2CReadReg8Raw (int fd, int reg) ;
 
 		[DllImport("libwiringPi.so", EntryPoint = "wiringPiI2CReadReg16")]
-		private static extern int wiringPiI2CReadReg16 (int fd, int reg) ;
+		private static extern int wiringPiI2CReadReg16Raw (int fd, int reg) ;
 
 		//pwm evtl Blödsinn: https://dzone.com/articles/controlling-led-raspberry-pi-2
 		[DllImport("libwiringPi.so", EntryPoint = "softPwmCreate")]
@@ -190,5 +222,20 @@ namespace WiringPiLib
 
 		[DllImport("libwiringPi.so", EntryPoint = "softPwmStop")]
 		private static extern void Stop(int pin);
+
+		[DllImport("libwiringPi.so", EntryPoint = "serialOpen")]
+		private static extern int serialOpenRaw ([MarshalAs(UnmanagedType.LPStr)]string device, int baud) ;
+		[DllImport("libwiringPi.so", EntryPoint = "serialClose")]
+		private static extern void serialCloseRaw (int fd);
+		[DllImport("libwiringPi.so", EntryPoint = "serialPutchar")]
+		private static extern void  serialPutcharRaw (int fd, char c);
+		[DllImport("libwiringPi.so", EntryPoint = "serialPuts")]
+		private static extern void  serialPutsRaw (int fd, [MarshalAs(UnmanagedType.LPStr)]string s) ;
+		[DllImport("libwiringPi.so", EntryPoint = "serialDataAvail")]
+		private static extern int serialDataAvailRaw (int fd) ;
+		[DllImport("libwiringPi.so", EntryPoint = "serialGetchar")]
+		private static extern int serialGetcharRaw (int fd) ;
+		[DllImport("libwiringPi.so", EntryPoint = "serialFlush")]
+		private static extern void serialFlushRaw (int fd) ;
 	}
 }

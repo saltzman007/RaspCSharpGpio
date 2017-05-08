@@ -54,6 +54,11 @@
     <Compile Include="DA_AD_DA_Reihe.cs" />
     <Compile Include="Funktionsgenerator8562FPZ_Parallel.cs" />
     <Compile Include="DA_8562FPZ_Parallel.cs" />
+    <Compile Include="Schrittmotor.cs" />
+    <Compile Include="UART.cs" />
+    <Compile Include="FolienTastatur.cs" />
+    <Compile Include="KompassHMC6343.cs" />
+    <Compile Include="KompassDisplay.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
