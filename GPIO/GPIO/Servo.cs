@@ -55,7 +55,7 @@ namespace GPIO1
 
 			Position = sollPosition;
 				
-			sollPosition = MaximalAusschlagGrad * Math.Sign (sollPosition);
+			//sollPosition = MaximalAusschlagGrad * Math.Sign (sollPosition);
 				
 			//Gängig ist ein 50-Hz-Signal (20 ms Periodenlänge), welches zwischen 500 Mikrosekunden (linker Anschlag, 0 Grad) und 2500 Mikrosekunden (rechter Anschlag, 180 Grad) auf High-Pegel und den Rest der Periodenlänge auf Low-Pegel ist.
 
