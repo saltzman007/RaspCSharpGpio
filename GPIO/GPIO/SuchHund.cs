@@ -12,14 +12,16 @@ namespace GPIO1
 		//Pinbelegung
 		const int PWMServoPin	= 18;	//parallel read won't work: pwm uses port 18 also!
 		readonly int[] Sensors = new int[] {23, 24, 25, 8, 7, 12, 16, 20 };
-		const int SHUTDOWN	=	21;
+		const int SHUTDOWNPIN	=	21;  // 1 = on, 0 = Shutdown
+		const int ACTIVPIN	=	4;		// 1 = lazy 0 = Active
 		bool InvertSensorInput{ get; set; }	//true für weiße Linie auf schwarzem Boden
 		static int SleepBetweenActions;
-		int LenkDeltainGrad{ get; set;}
+		int LenkDeltaInGrad{ get; set;}
 		Servo LenkServo { get; set;}
 		int NonPlausibleWaitTimerMilliSec{ get; set;}
 		DateTime LastPlausibleSensorResult = DateTime.Now;
 		bool TooLongUnplausibleSensorResult = false;
+		static bool IsActive = false;
 
 		static ILog Log4Net = LogManager.GetLogger("SuchHund");
 
@@ -30,8 +32,11 @@ namespace GPIO1
 			WiringPiLib = new WirinPiWrapper();
 			WiringPiLib.WiringPiSetupGpio ();
 
-			WiringPiLib.PinMode(SHUTDOWN, PinType.INPUT) ;
-			WiringPiLib.PullUpDnControl (SHUTDOWN, PullUpType.PUD_UP);
+			WiringPiLib.PinMode(SHUTDOWNPIN, PinType.INPUT) ;
+			WiringPiLib.PullUpDnControl (SHUTDOWNPIN, PullUpType.PUD_UP);
+
+			WiringPiLib.PinMode(ACTIVPIN, PinType.INPUT) ;
+			WiringPiLib.PullUpDnControl (ACTIVPIN, PullUpType.PUD_UP);
 
 			for (int i = 0; i < Sensors.Length; i++) {
 				WiringPiLib.PinMode (Sensors [i], PinType.INPUT);
@@ -47,7 +52,7 @@ namespace GPIO1
 			int hundServoMilliSecRight = Int32.Parse(ConfigurationManager.AppSettings ["HundServoMicroSecRight"]);
 			InvertSensorInput = bool.Parse(ConfigurationManager.AppSettings ["HundInvertSensorInput"]);
 			NonPlausibleWaitTimerMilliSec = Int32.Parse(ConfigurationManager.AppSettings ["HundNonPlausibleWaitTimerMilliSec"]);
-			LenkDeltainGrad = Int32.Parse(ConfigurationManager.AppSettings ["HundLenkDeltainGrad"]);
+			LenkDeltaInGrad = Int32.Parse(ConfigurationManager.AppSettings ["HundLenkDeltainGrad"]);
 
 			LenkServo = new Servo (PWMServoPin, servohertz, pwmRange, servoMaximalAusschlagGrad, WiringPiLib, hundServoMilliSecLeft, hundServoMilliSecRight);
 		}
@@ -80,7 +85,7 @@ namespace GPIO1
 			bool result = true;
 
 			//wer nix liest ist sinnlos
-			if (sensorsResults == 0)
+			if ((sensorsResults == 0) || (sensorsResults == 0xff))
 				result = false;
 			else {
 				//Sinnvoll ist es, wenn 
@@ -125,9 +130,9 @@ namespace GPIO1
 
 		enum Direction
 		{
-			Left = -1,
+			GoLeft = -1,
 			OnTrack = 0,
-			Right = 1
+			GoRight = 1
 		}
 
 		private Direction GetSollDirection(long sensors)
@@ -141,12 +146,12 @@ namespace GPIO1
 
 			//i steht jetzt am Linken Rand der Linie
 			if (i < Sensors.Length / 2)
-				return Direction.Left;
+				return Direction.GoLeft;
 
 			if (i == Sensors.Length / 2)
 				return Direction.OnTrack;
 
-			return Direction.Right;
+			return Direction.GoRight;
 		}
 
 		private void Lenke(Direction direction)
@@ -155,19 +160,20 @@ namespace GPIO1
 
 			if (direction == Direction.OnTrack) 
 			{
+				//Auf der perfekten Linie nix machen
 				//LenkServo.SetPosition (0);
 			}
 			
-			if (direction == Direction.Left) 
+			if (direction == Direction.GoLeft) 
 			{
-				if(LenkServo.Position > (LenkDeltainGrad -90))
-					LenkServo.SetPosition (LenkServo.Position - LenkDeltainGrad);
+				if(LenkServo.Position > (LenkDeltaInGrad -90))
+					LenkServo.SetPosition (LenkServo.Position - LenkDeltaInGrad);
 			}
 
-			if (direction == Direction.Right) 
+			if (direction == Direction.GoRight) 
 			{
-				if(LenkServo.Position < (90 + LenkDeltainGrad))
-					LenkServo.SetPosition (LenkServo.Position + LenkDeltainGrad);
+				if(LenkServo.Position < (90 + LenkDeltaInGrad))
+					LenkServo.SetPosition (LenkServo.Position + LenkDeltaInGrad);
 			}
 		}
 
@@ -245,11 +251,28 @@ namespace GPIO1
 			}
 		}
 
+		void ActivCheck(bool sollState)
+		{
+			if (IsActive == sollState)
+				return;
+
+			Thread.Sleep (300);	//Entprellen
+
+			IsActive = sollState;
+
+			if (!IsActive)
+				LenkServo.SetPosition (0);
+		}
+
 		public void Suche()
 		{
 			while (true) 
 			{
-				if (WiringPiLib.DigitalRead (SHUTDOWN) == 0)
+				ActivCheck (WiringPiLib.DigitalRead (SHUTDOWNPIN) == 0);
+				if (!IsActive)
+					continue;
+
+				if (WiringPiLib.DigitalRead (SHUTDOWNPIN) == 0)
 					Process.Start ("/usr/bin/sudo", "/sbin/shutdown -h now");
 
 				long sensorResult = ReadSensors ();
