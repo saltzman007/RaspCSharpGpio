@@ -2,6 +2,7 @@
 using System.Threading;
 //using Raspberry.IO.GeneralPurpose;
 using WiringPiLib;
+using System.Configuration;
 
 namespace GPIO1
 {
@@ -885,6 +886,7 @@ namespace GPIO1
 		{
 			UART uart = new UART();
 			string result = uart.WriteRead("bullshit");
+			Console.WriteLine (result);
 		}
 
 		private static void DA_AD_DA_Reihe()
@@ -938,6 +940,17 @@ namespace GPIO1
 		}
 
 
+		private static void SuchHund()
+		{
+			SuchHund suchHund = new GPIO1.SuchHund();
+
+			//suchHund.ServoTest ();
+			//suchHund.SensorTest ();
+			suchHund.Suche ();
+		}
+
+
+
 		public static void Main (string[] args)
 		{
 			//Blinky ();
@@ -983,7 +996,8 @@ namespace GPIO1
 			//Schrittmotor ();
 			//FolienTastatur();
 			//UART();
-			Kompass ();
+			//Kompass ();
+			SuchHund();
 		}
 	}
 }
