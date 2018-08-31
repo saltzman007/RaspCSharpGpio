@@ -13,10 +13,10 @@ namespace GPIO1
 		const int PWMServoPin	= 18;	//parallel read won't work: pwm uses port 18 also!
 		readonly int[] Sensors = new int[] {23, 24, 25, 8, 7, 12, 16, 20 };
 		const int SHUTDOWNPIN	=	21;  // 1 = on, 0 = Shutdown
-		const int ACTIVPIN	=	4;		// 1 = lazy 0 = Active
+		const int ACTIVPIN	=	17;		// 0 = lazy 1 = Active
 		bool InvertSensorInput{ get; set; }	//true für weiße Linie auf schwarzem Boden
 		static int SleepBetweenActions;
-		int LenkDeltaInGrad{ get; set;}
+		float LenkDeltaInGrad{ get; set;}
 		Servo LenkServo { get; set;}
 		int NonPlausibleWaitTimerMilliSec{ get; set;}
 		DateTime LastPlausibleSensorResult = DateTime.Now;
@@ -36,7 +36,7 @@ namespace GPIO1
 			WiringPiLib.PullUpDnControl (SHUTDOWNPIN, PullUpType.PUD_UP);
 
 			WiringPiLib.PinMode(ACTIVPIN, PinType.INPUT) ;
-			WiringPiLib.PullUpDnControl (ACTIVPIN, PullUpType.PUD_UP);
+			WiringPiLib.PullUpDnControl (ACTIVPIN, PullUpType.PUD_DOWN);
 
 			for (int i = 0; i < Sensors.Length; i++) {
 				WiringPiLib.PinMode (Sensors [i], PinType.INPUT);
@@ -52,7 +52,7 @@ namespace GPIO1
 			int hundServoMilliSecRight = Int32.Parse(ConfigurationManager.AppSettings ["HundServoMicroSecRight"]);
 			InvertSensorInput = bool.Parse(ConfigurationManager.AppSettings ["HundInvertSensorInput"]);
 			NonPlausibleWaitTimerMilliSec = Int32.Parse(ConfigurationManager.AppSettings ["HundNonPlausibleWaitTimerMilliSec"]);
-			LenkDeltaInGrad = Int32.Parse(ConfigurationManager.AppSettings ["HundLenkDeltainGrad"]);
+			LenkDeltaInGrad = float.Parse(ConfigurationManager.AppSettings ["HundLenkDeltainGrad"]);
 
 			LenkServo = new Servo (PWMServoPin, servohertz, pwmRange, servoMaximalAusschlagGrad, WiringPiLib, hundServoMilliSecLeft, hundServoMilliSecRight);
 		}
@@ -161,18 +161,22 @@ namespace GPIO1
 			if (direction == Direction.OnTrack) 
 			{
 				//Auf der perfekten Linie nix machen
-				//LenkServo.SetPosition (0);
+				LenkServo.SetPosition (0);
 			}
 			
 			if (direction == Direction.GoLeft) 
 			{
-				if(LenkServo.Position > (LenkDeltaInGrad -90))
+				if(LenkServo.Position > 0)	//Wir sollen nach links, fahren aber noch rechts: Trägheit
+					LenkServo.SetPosition (0);
+				else if(LenkServo.Position > (LenkDeltaInGrad -90))
 					LenkServo.SetPosition (LenkServo.Position - LenkDeltaInGrad);
 			}
 
 			if (direction == Direction.GoRight) 
 			{
-				if(LenkServo.Position < (90 + LenkDeltaInGrad))
+				if(LenkServo.Position < 0)
+					LenkServo.SetPosition (0);		//Trägheit
+				else if(LenkServo.Position < (90 + LenkDeltaInGrad))
 					LenkServo.SetPosition (LenkServo.Position + LenkDeltaInGrad);
 			}
 		}
@@ -268,9 +272,13 @@ namespace GPIO1
 		{
 			while (true) 
 			{
-				ActivCheck (WiringPiLib.DigitalRead (SHUTDOWNPIN) == 0);
-				if (!IsActive)
+				ActivCheck (WiringPiLib.DigitalRead (ACTIVPIN) == 1);
+				if (!IsActive) 
+				{
+					Log4Net.Info ($"INACTIVE, Alte Position: {LenkServo.Position}");
+					Thread.Sleep (300);
 					continue;
+				}
 
 				if (WiringPiLib.DigitalRead (SHUTDOWNPIN) == 0)
 					Process.Start ("/usr/bin/sudo", "/sbin/shutdown -h now");
